@@ -5,9 +5,10 @@
 #include "../../globals/enums.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 
-#define TABLE_SIZE 64
+#define TABLE_SIZE 1007
 
 
 typedef struct Entry {

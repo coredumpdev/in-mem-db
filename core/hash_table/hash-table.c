@@ -2,9 +2,21 @@
 
 
 static unsigned int ht_hash(const void *key, size_t ks) {
-    const unsigned char *p = key; unsigned int h = 5381;
-    for (size_t i = 0; i < ks; i++) h = ((h << 5) + h) + p[i];
-    return h % TABLE_SIZE;
+    uint32_t hash = 0x7F4A7C15;
+    for (size_t i = 0; i < ks; i++)
+    {
+        uint32_t c = *((unsigned char *) key++);
+        hash ^= (c + (hash << 5) + (hash >> 3));
+        hash  = (hash << 11) | (hash >> 21);
+        hash += (c * 97);
+        hash ^= (hash >> 13);
+    }
+
+    hash ^= (hash << 7);
+    hash += (hash >> 17);
+    hash ^= (hash << 5);
+
+    return hash % TABLE_SIZE;
 }
 HashTable *ht_create(void) { return calloc(1, sizeof(HashTable)); }
  
