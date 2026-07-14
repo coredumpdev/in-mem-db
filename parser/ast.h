@@ -4,24 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef enum
-{
-    CMD_SET,
-    CMD_GET,
-    CMD_DEL,
-    CMD_EXISTS,
-    CMD_APPEND,
-    CMD_RENAME,
-    CMD_MSET,
-    CMD_MGET,
-    CMD_KEYS,
-    CMD_DBSIZE,
-    CMD_FLUSHDB,
-    CMD_HELP,
-    CMD_EXIT,
-    CMD_UNKNOWN,
-} CmdKind;
-
+#include "../core/enums.h"
 typedef struct ArgNode
 {
     char value[256];

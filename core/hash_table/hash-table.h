@@ -1,8 +1,8 @@
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
 
-#include "../../globals/enums.h"
-#include "../../utils/log.h"
+#include "../enums.h"
+#include "../log.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>

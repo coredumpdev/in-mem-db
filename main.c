@@ -1,5 +1,5 @@
 #include "core/hash_table/hash-table.h"
-#include "utils/log.h"
+#include "core/log.h"
 
 #include "parser/ast.h"
 #include "parser/eval.h"

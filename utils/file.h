@@ -1,8 +1,8 @@
 #ifndef FILE_H
 #define FILE_H
 
-#include "../globals/enums.h"
-#include "log.h"
+#include "../core/enums.h"
+#include "../core/log.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>

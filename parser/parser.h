@@ -1,7 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "../utils/log.h"
+#include "../core/log.h"
 #include "ast.h"
 #include "lexer.h"
 
