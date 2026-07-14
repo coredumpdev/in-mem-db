@@ -5,7 +5,8 @@
 #include "ast.h"
 #include "lexer.h"
 
-typedef struct {
+typedef struct
+{
     Lexer lexer;
     Token current;
 } Parser;

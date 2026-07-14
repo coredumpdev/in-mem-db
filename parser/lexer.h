@@ -4,14 +4,22 @@
 #include <ctype.h>
 #include <string.h>
 
-typedef enum { TK_IDENT, TK_STRING, TK_EOF, TK_ERROR } TokenKind;
+typedef enum
+{
+    TK_IDENT,
+    TK_STRING,
+    TK_EOF,
+    TK_ERROR
+} TokenKind;
 
-typedef struct {
+typedef struct
+{
     TokenKind kind;
     char text[256];
 } Token;
 
-typedef struct {
+typedef struct
+{
     const char* src;
     int pos;
 } Lexer;

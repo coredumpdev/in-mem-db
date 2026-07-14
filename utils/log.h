@@ -7,7 +7,8 @@
 
 #ifdef DEBUG
 #define LOG(fd, ...)                                                                               \
-    do {                                                                                           \
+    do                                                                                             \
+    {                                                                                              \
         fprintf((fd), "[LOG] ");                                                                   \
         fprintf((fd), __VA_ARGS__);                                                                \
         fprintf((fd), "\n");                                                                       \

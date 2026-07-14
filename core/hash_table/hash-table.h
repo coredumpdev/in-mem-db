@@ -9,14 +9,16 @@
 
 #define TABLE_SIZE 1007
 
-typedef struct Entry {
+typedef struct Entry
+{
     void* key;
     void* value;
     size_t key_size;
     struct Entry* next;
 } Entry;
 
-typedef struct {
+typedef struct
+{
     Entry* buckets[TABLE_SIZE];
     int count;
 } HashTable;

@@ -5,7 +5,8 @@
 #include "parser/eval.h"
 #include "parser/parser.h"
 
-static int run(HashTable* db, const char* line) {
+static int run(HashTable* db, const char* line)
+{
     LOG(stdout, "ykr> %s", line);
 
     Parser p;
@@ -21,7 +22,8 @@ static int run(HashTable* db, const char* line) {
     return stop;
 }
 
-int main(void) {
+int main(void)
+{
     HashTable* ht = ht_create();
 
     HT_SET_STR(ht, "name", strdup("Tolga"));

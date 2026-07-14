@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef enum {
+typedef enum
+{
     CMD_SET,
     CMD_GET,
     CMD_DEL,
@@ -21,12 +22,14 @@ typedef enum {
     CMD_UNKNOWN,
 } CmdKind;
 
-typedef struct ArgNode {
+typedef struct ArgNode
+{
     char value[256];
     struct ArgNode* next;
 } ArgNode;
 
-typedef struct {
+typedef struct
+{
     CmdKind kind;
     ArgNode* args;
     int arg_count;

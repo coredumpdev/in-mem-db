@@ -11,7 +11,7 @@ PointerAlignment: Left
 AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: false
 AlwaysBreakTemplateDeclarations: Yes
-BreakBeforeBraces: Attach
+BreakBeforeBraces: Allman
 SortIncludes: CaseInsensitive
 SpaceAfterCStyleCast: true
 Standard: Auto
