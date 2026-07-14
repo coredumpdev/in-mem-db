@@ -12,6 +12,7 @@
 
 int create_tcp_socketd(int domain);
 int set_socket_opt(int sd, int flag[2], int* opt);
+int set_nonblocking(int sd);
 int tcp_bind(int sd, unsigned short port);
 int tcp_listen(int sd, int queue);
 

@@ -1,4 +1,5 @@
 #include "tcp.h"
+#include <fcntl.h>
 
 int create_tcp_socketd(int domain)
 {
@@ -21,6 +22,17 @@ int set_socket_opt(int sd, int flag[2], int* opt)
     }
     return TCP_SUCCESS;
 }
+
+int set_nonblocking(int sd)
+{
+    int flags = fcntl(sd, F_GETFL, 0);
+    if (flags == -1)
+        return TCP_SOPT_ERR;
+    if (fcntl(sd, F_SETFL, flags | O_NONBLOCK) == -1)
+        return TCP_SOPT_ERR;
+    return TCP_SUCCESS;
+}
+
 int tcp_bind(int sd, unsigned short port)
 {
     struct sockaddr_in addr = {0};
