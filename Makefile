@@ -11,7 +11,9 @@ DEPS := \
 	parser/parser.c parser/parser.h \
 	parser/eval.c  parser/eval.h  \
 	globals/enums.h \
-	utils/log.h
+	utils/log.h \
+	utils/file.c utils/file.h \
+	net/tcp.c net/tcp.h \
 
 .PHONY: all run clean
 
