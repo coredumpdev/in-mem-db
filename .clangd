@@ -1,24 +1,12 @@
-# Linux userspace C / C++ projeleri için clangd yapılandırması
-# Kopyala:  cp ~/.config/nvim/templates/linux-c-cpp/.clangd /proje/kökün/
-#
-# En iyi sonuç için compile_commands.json bulundurun:
-#   - CMake:  cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build && ln -sf build/compile_commands.json .
-#   - Make:   bear -- make
-#   - Meson:  build dizininde otomatik üretilir (ln -sf build/compile_commands.json .)
 
 CompileFlags:
-  # CMake compile_commands.json'u build/ altında üretir; clangd oradan okur.
   CompilationDatabase: build
   Add:
     - -Wall
     - -Wextra
-    # compile_commands.json YOKSA standart belirlemek için (varsa gerekmez):
-    # - -std=c++20      # C++ için
-    - --std=gnu17      # C için
+    - --std=gnu17
 
 Diagnostics:
-  # IncludeCleaner kapalı: transitive (header üzerinden dolaylı) include'lara
-  # "No header providing X" / "not used directly" uyarısı verilmesin.
   UnusedIncludes: None
   MissingIncludes: None
   ClangTidy:
