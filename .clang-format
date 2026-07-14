@@ -1,0 +1,21 @@
+# Linux userspace C/C++ için örnek biçimlendirme stili (LLVM tabanlı, 4 boşluk).
+# <leader>f (conform + clang-format) bu dosyayı otomatik kullanır.
+# Kernel ağacında ÇALIŞMA — orada kernel'in kendi .clang-format'ı kullanılır.
+---
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+PointerAlignment: Left
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+AlwaysBreakTemplateDeclarations: Yes
+BreakBeforeBraces: Attach
+SortIncludes: CaseInsensitive
+SpaceAfterCStyleCast: true
+Standard: Auto
+---
+Language: C
+AccessModifierOffset: -4
+NamespaceIndentation: None

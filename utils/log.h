@@ -6,13 +6,14 @@
 #define DEBUG
 
 #ifdef DEBUG
-    #define LOG(fd, ...) do {                \
-        fprintf((fd), "[LOG] ");             \
-        fprintf((fd), __VA_ARGS__);          \
-        fprintf((fd), "\n");                 \
+#define LOG(fd, ...)                                                                               \
+    do {                                                                                           \
+        fprintf((fd), "[LOG] ");                                                                   \
+        fprintf((fd), __VA_ARGS__);                                                                \
+        fprintf((fd), "\n");                                                                       \
     } while (0)
 #else
-    #define LOG(fd, ...) ((void)0)
+#define LOG(fd, ...) ((void) 0)
 #endif
 
 #endif

@@ -1,0 +1,25 @@
+# --- CMake build çıktısı ---
+/build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+
+# --- Derlenmiş çıktı ---
+/main
+*.o
+*.a
+*.so
+*.out
+
+# --- Debug / analiz ---
+*.dSYM/
+vgcore.*
+core
+perf.data*
+
+# --- Editör / OS ---
+*.swp
+*.swo
+*~
+.DS_Store

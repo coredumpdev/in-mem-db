@@ -5,14 +5,9 @@ typedef enum {
     NOT_FOUND,
     FOUND
 
-}ACTIONS;
+} ACTIONS;
 
-typedef enum {
-    FILE_SUCCESS,
-    FILE_NOT_FOUND,
-    NOT_OPEN,
-    READ_ERROR
-}File;
+typedef enum { FILE_SUCCESS, FILE_NOT_FOUND, NOT_OPEN, READ_ERROR } File;
 
 typedef enum {
     TCP_SUCCESS = 0,
@@ -21,8 +16,6 @@ typedef enum {
     TCP_BIND_ERR = -3,
     TCP_LIST_ERR = -4
 
-
-}TCPSocket;
-
+} TCPSocket;
 
 #endif
