@@ -20,7 +20,7 @@ add_executable(main
   parser/parser.c
   parser/eval.c
   utils/file.c
-  net/tcp.c
+  net/tcp/tcp.c
 )
 
 target_include_directories(main PRIVATE ${CMAKE_SOURCE_DIR})

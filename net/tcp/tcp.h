@@ -1,8 +1,8 @@
 #ifndef TCP_H
 #define TCP_H
 
-#include "../globals/enums.h"
-#include "../utils/log.h"
+#include "../../globals/enums.h"
+#include "../../utils/log.h"
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdio.h>
