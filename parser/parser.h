@@ -12,6 +12,6 @@ typedef struct
 } Parser;
 
 void parser_init(Parser* p, const char* src);
-ASTNode* parse(Parser* p);
+ASTNode* parse(Parser* p, char* out, size_t cap, size_t* out_len);
 
 #endif

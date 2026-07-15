@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "../core/outbuf.h"
 #include <stdio.h>
 
 void parser_init(Parser* p, const char* src)
@@ -83,12 +84,12 @@ static int parse_value(Parser* p, char* out)
     return 0;
 }
 
-ASTNode* parse(Parser* p)
+ASTNode* parse(Parser* p, char* out, size_t cap, size_t* out_len)
 {
     Token cmd_tok = parser_expect(p, TK_IDENT);
     if (cmd_tok.kind == TK_ERROR)
     {
-        printf("ERR expected command, got '%s'\n", cmd_tok.text);
+        out_write(out, cap, out_len, "ERR expected command, got '%s'\n", cmd_tok.text);
         return NULL;
     }
 
@@ -97,7 +98,7 @@ ASTNode* parse(Parser* p)
 
     if (node->kind == CMD_UNKNOWN)
     {
-        printf("ERR unknown command '%s'\n", cmd_tok.text);
+        out_write(out, cap, out_len, "ERR unknown command '%s'\n", cmd_tok.text);
         free(node);
         return NULL;
     }
@@ -112,56 +113,56 @@ ASTNode* parse(Parser* p)
     case CMD_SET:
         if (n != 2)
         {
-            puts("ERR SET <key> <value>");
+            out_write(out, cap, out_len, "ERR SET <key> <value>\n");
             err = 1;
         }
         break;
     case CMD_GET:
         if (n != 1)
         {
-            puts("ERR GET <key>");
+            out_write(out, cap, out_len, "ERR GET <key>\n");
             err = 1;
         }
         break;
     case CMD_DEL:
         if (n < 1)
         {
-            puts("ERR DEL <key> [key ...]");
+            out_write(out, cap, out_len, "ERR DEL <key> [key ...]\n");
             err = 1;
         }
         break;
     case CMD_EXISTS:
         if (n != 1)
         {
-            puts("ERR EXISTS <key>");
+            out_write(out, cap, out_len, "ERR EXISTS <key>\n");
             err = 1;
         }
         break;
     case CMD_APPEND:
         if (n != 2)
         {
-            puts("ERR APPEND <key> <value>");
+            out_write(out, cap, out_len, "ERR APPEND <key> <value>\n");
             err = 1;
         }
         break;
     case CMD_RENAME:
         if (n != 2)
         {
-            puts("ERR RENAME <old> <new>");
+            out_write(out, cap, out_len, "ERR RENAME <old> <new>\n");
             err = 1;
         }
         break;
     case CMD_MSET:
         if (n < 2 || n % 2 != 0)
         {
-            puts("ERR MSET k v [k v ...]");
+            out_write(out, cap, out_len, "ERR MSET k v [k v ...]\n");
             err = 1;
         }
         break;
     case CMD_MGET:
         if (n < 1)
         {
-            puts("ERR MGET <key> [key ...]");
+            out_write(out, cap, out_len, "ERR MGET <key> [key ...]\n");
             err = 1;
         }
         break;
@@ -172,6 +173,7 @@ ASTNode* parse(Parser* p)
     if (err)
     {
         free_ast(node);
+        free(node);
         return NULL;
     }
     return node;

@@ -1,4 +1,5 @@
 #include "eval.h"
+#include "../core/outbuf.h"
 
 static const char* arg(ASTNode* node, int n)
 {
@@ -8,18 +9,18 @@ static const char* arg(ASTNode* node, int n)
     return a ? a->value : NULL;
 }
 
-int eval(ASTNode* node, HashTable* db)
+int eval(ASTNode* node, HashTable* db, char* out, size_t cap, size_t* out_len)
 {
     switch (node->kind)
     {
     case CMD_SET:
         ht_set(db, arg(node, 0), strdup(arg(node, 1)));
-        puts("OK");
+        out_write(out, cap, out_len, "OK\n");
         break;
     case CMD_GET:
     {
         char* v = ht_get(db, arg(node, 0));
-        v ? printf("\"%s\"\n", v) : puts("(nil)");
+        v ? out_write(out, cap, out_len, "\"%s\"\n", v) : out_write(out, cap, out_len, "(nil)\n");
         break;
     }
     case CMD_DEL:
@@ -27,11 +28,11 @@ int eval(ASTNode* node, HashTable* db)
         int n = 0;
         for (ArgNode* a = node->args; a; a = a->next)
             n += ht_delete(db, a->value);
-        printf("(integer) %d\n", n);
+        out_write(out, cap, out_len, "(integer) %d\n", n);
         break;
     }
     case CMD_EXISTS:
-        printf("(integer) %d\n", ht_get(db, arg(node, 0)) ? 1 : 0);
+        out_write(out, cap, out_len, "(integer) %d\n", ht_get(db, arg(node, 0)) ? 1 : 0);
         break;
     case CMD_APPEND:
     {
@@ -49,7 +50,7 @@ int eval(ASTNode* node, HashTable* db)
             nv = strdup(suf);
         }
         ht_set(db, key, nv);
-        printf("(integer) %zu\n", strlen(nv));
+        out_write(out, cap, out_len, "(integer) %zu\n", strlen(nv));
         break;
     }
     case CMD_RENAME:
@@ -57,12 +58,12 @@ int eval(ASTNode* node, HashTable* db)
         char* v = ht_get(db, arg(node, 0));
         if (!v)
         {
-            puts("ERR no such key");
+            out_write(out, cap, out_len, "ERR no such key\n");
             break;
         }
         ht_set(db, arg(node, 1), strdup(v));
         ht_delete(db, arg(node, 0));
-        puts("OK");
+        out_write(out, cap, out_len, "OK\n");
         break;
     }
     case CMD_MSET:
@@ -73,7 +74,7 @@ int eval(ASTNode* node, HashTable* db)
             ht_set(db, a->value, strdup(a->next->value));
             a = a->next->next;
         }
-        puts("OK");
+        out_write(out, cap, out_len, "OK\n");
         break;
     }
     case CMD_MGET:
@@ -82,7 +83,8 @@ int eval(ASTNode* node, HashTable* db)
         for (ArgNode* a = node->args; a; a = a->next, i++)
         {
             char* v = ht_get(db, a->value);
-            v ? printf("%d) \"%s\"\n", i, v) : printf("%d) (nil)\n", i);
+            v ? out_write(out, cap, out_len, "%d) \"%s\"\n", i, v)
+              : out_write(out, cap, out_len, "%d) (nil)\n", i);
         }
         break;
     }
@@ -91,13 +93,13 @@ int eval(ASTNode* node, HashTable* db)
         int n = 0;
         for (int i = 0; i < TABLE_SIZE; i++)
             for (Entry* e = db->buckets[i]; e; e = e->next)
-                printf("%d) \"%s\"\n", ++n, (char*) e->key);
+                out_write(out, cap, out_len, "%d) \"%s\"\n", ++n, (char*) e->key);
         if (!n)
-            puts("(empty)");
+            out_write(out, cap, out_len, "(empty)\n");
         break;
     }
     case CMD_DBSIZE:
-        printf("(integer) %d\n", db->count);
+        out_write(out, cap, out_len, "(integer) %d\n", db->count);
         break;
     case CMD_FLUSHDB:
     {
@@ -115,20 +117,21 @@ int eval(ASTNode* node, HashTable* db)
             db->buckets[i] = NULL;
         }
         db->count = 0;
-        puts("OK");
+        out_write(out, cap, out_len, "OK\n");
         break;
     }
     case CMD_HELP:
-        puts("  SET    <key> <value>\n"
-             "  GET    <key>\n"
-             "  DEL    <key> [key ...]\n"
-             "  EXISTS <key>\n"
-             "  APPEND <key> <value>\n"
-             "  RENAME <old> <new>\n"
-             "  MSET   <k> <v> [k v ...]\n"
-             "  MGET   <key> [key ...]\n"
-             "  KEYS / DBSIZE / FLUSHDB\n"
-             "  EXIT / QUIT");
+        out_write(out, cap, out_len,
+                  "  SET    <key> <value>\n"
+                  "  GET    <key>\n"
+                  "  DEL    <key> [key ...]\n"
+                  "  EXISTS <key>\n"
+                  "  APPEND <key> <value>\n"
+                  "  RENAME <old> <new>\n"
+                  "  MSET   <k> <v> [k v ...]\n"
+                  "  MGET   <key> [key ...]\n"
+                  "  KEYS / DBSIZE / FLUSHDB\n"
+                  "  EXIT / QUIT\n");
         break;
     case CMD_EXIT:
         return 1;

@@ -15,12 +15,14 @@ add_compile_options(-Wall -Wextra)
 add_executable(main
   main.c
   core/hash_table/hash-table.c
+  core/outbuf.c
   parser/ast.c
   parser/lexer.c
   parser/parser.c
   parser/eval.c
   utils/file.c
   net/tcp/tcp.c
+  net/tcp/server.c
 )
 
 target_include_directories(main PRIVATE ${CMAKE_SOURCE_DIR})

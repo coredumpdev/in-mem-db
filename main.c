@@ -1,55 +1,38 @@
 #include "core/hash_table/hash-table.h"
 #include "core/log.h"
 
-#include "parser/ast.h"
-#include "parser/eval.h"
-#include "parser/parser.h"
+#include "net/tcp/server.h"
+#include "net/tcp/tcp.h"
 
-static int run(HashTable* db, const char* line)
-{
-    LOG(stdout, "ykr> %s", line);
+#include <stdlib.h>
 
-    Parser p;
-    parser_init(&p, line);
-
-    ASTNode* node = parse(&p);
-    if (!node)
-        return 0;
-
-    int stop = eval(node, db);
-    free_ast(node);
-    free(node);
-    return stop;
-}
+#define PORT   6379
+#define BACKLOG 512
 
 int main(void)
 {
-    HashTable* ht = ht_create();
+    HashTable* db = ht_create();
 
-    HT_SET_STR(ht, "name", strdup("Tolga"));
-    HT_SET_STR(ht, "city", strdup("Istanbul"));
-    HT_SET_STR(ht, "lang", strdup("tr"));
+    int sd = create_tcp_socketd(AF_INET);
+    if (sd < 0)
+        return 1;
 
-    LOG(stdout, "name -> %s", (char*) HT_GET_STR(ht, "name"));
+    int one = 1;
+    int opt[2] = {SOL_SOCKET, SO_REUSEADDR};
+    set_socket_opt(sd, opt, &one);
 
-    const char* program[] = {
-        "SET greeting \"merhaba dunya\"",
-        "GET greeting",
-        "APPEND greeting \"!\"",
-        "GET greeting",
-        "MSET a 1 b 2 c 3",
-        "MGET a b c",
-        "EXISTS name",
-        "DEL city lang",
-        "DBSIZE",
-        "RENAME name nick",
-        "GET nick",
-        "KEYS",
-    };
+    if (tcp_bind(sd, PORT) != TCP_SUCCESS)
+        return 1;
+    if (tcp_listen(sd, BACKLOG) != TCP_SUCCESS)
+        return 1;
+    if (set_nonblocking(sd) != TCP_SUCCESS)
+        return 1;
 
-    for (size_t i = 0; i < sizeof(program) / sizeof(program[0]); i++)
-        run(ht, program[i]);
+    LOG(stdout, "ykr-cache listening on port %d", PORT);
 
-    ht_destroy(ht);
+    server_run(sd, db);
+
+    close(sd);
+    ht_destroy(db);
     return 0;
 }
